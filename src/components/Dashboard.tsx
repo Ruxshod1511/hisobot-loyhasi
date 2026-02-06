@@ -2,8 +2,6 @@ import { useEffect, useState, useRef, useMemo, memo } from 'react'
 import { supabase } from '../supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import { LogOut, Trash2, Save, Download, FolderOpen, FilePlus, Search, X, Plus, FileSpreadsheet, CheckSquare, Square } from 'lucide-react'
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
 
 interface ReportGroup {
     id: string
@@ -285,7 +283,10 @@ export const Dashboard = () => {
         )
     }, [reportGroups, searchQuery])
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        const { default: jsPDF } = await import('jspdf')
+        const { default: autoTable } = await import('jspdf-autotable')
+
         const doc = new jsPDF()
         doc.setFontSize(22)
         doc.text(reportName || 'Achot Hisoboti', 14, 20)
@@ -311,8 +312,7 @@ export const Dashboard = () => {
         const totalTovar = rows.reduce((acc, r) => acc + (Number(r.tovar) || 0), 0)
         const grandItog = rows.reduce((acc, r) => acc + calculateItog(r), 0)
 
-        // @ts-ignore
-        doc.autoTable({
+        autoTable(doc, {
             head: [['N', 'SABABLAR', 'TOVAR', 'OK', 'RASXOD', 'VAZVIRAT', 'PUL', 'KILIK O\'ZI', 'ITOG']],
             body: tableData,
             startY: 45,
