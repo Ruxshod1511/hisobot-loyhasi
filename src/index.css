@@ -212,8 +212,8 @@ body {
 /* Dashboard Styles */
 .dashboard-container {
     width: 100%;
-    max-width: 1700px;
-    padding: 4rem 5rem;
+    max-width: 1600px;
+    padding: 2rem;
     margin: 0 auto;
 }
 
@@ -239,12 +239,9 @@ body {
 }
 
 .table-wrapper {
-    background: var(--card-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--premium-radius);
-    overflow-x: auto;
-    box-shadow: var(--shadow-premium);
+    background: #ffffff;
     padding-bottom: 2rem;
+    overflow-x: auto;
 }
 
 .report-table {
@@ -272,7 +269,34 @@ body {
     color: #000;
     background: #fff;
     height: 4.5rem;
-    /* Taller rows */
+}
+
+/* Cell Colors from Reference Card */
+.sabablar-cell {
+    background: #c3d69b;
+    border-radius: 12px 0 0 12px;
+}
+
+.tovar-cell {
+    background: #fac0d0;
+}
+
+.rasxod-cell {
+    background: #92d050;
+}
+
+.pul-cell {
+    background: #00b0f0;
+}
+
+.itog-val {
+    background: #ffff00;
+    font-weight: 900;
+    border-radius: 0 12px 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .report-table td input {
@@ -283,18 +307,17 @@ body {
     border: none;
     color: #000000;
     font-size: 1.4rem;
-    /* Larger font for numbers */
     font-weight: 900;
     text-align: center;
-}
-
-.sabablar-cell input {
-    text-align: left !important;
 }
 
 .report-table td input:focus {
     outline: none;
     background: rgba(0, 0, 0, 0.05);
+}
+
+.sabablar-cell input {
+    text-align: left !important;
 }
 
 .sabablar-cell {
@@ -599,4 +622,77 @@ input[type=number] {
     border-color: var(--primary) !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transform: translateX(4px);
+}
+
+/* Advanced Selection & Export Styles */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.custom-checkbox:hover {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+.row-selected {
+    background-color: rgba(99, 102, 241, 0.08) !important;
+}
+
+.row-selected td {
+    background-color: transparent !important;
+}
+
+.excel-btn {
+    background: #10b981 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.excel-btn:hover {
+    background: #059669 !important;
+}
+
+.delete-selected-btn {
+    background: #f97316 !important;
+    /* Orange-red for destructive action */
+    color: white !important;
+    border: none !important;
+}
+
+.delete-selected-btn:hover {
+    background: #ea580c !important;
+}
+
+.custom-checkbox svg {
+    border-radius: 6px;
+    background: white;
+}
+
+.row-selected .custom-checkbox {
+    color: var(--primary);
+}
+
+/* Marquee Selection Box Styles */
+.selection-marquee {
+    position: absolute;
+    background: rgba(99, 102, 241, 0.2);
+    /* Translucent blue */
+    border: 1px solid rgba(99, 102, 241, 0.8);
+    /* Solid blue border */
+    pointer-events: none;
+    /* Allows mouse events to pass through */
+    z-index: 10;
+    border-radius: 4px;
+    /* Slight rounding for a modern look */
+}
+
+/* Ensure the table data cells don't have user-select when dragging */
+.is-selecting {
+    user-select: none !important;
 }

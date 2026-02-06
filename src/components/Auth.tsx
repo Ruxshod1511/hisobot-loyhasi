@@ -28,7 +28,7 @@ const Auth = () => {
                     }
                 })
                 if (error) throw error
-                setMessage({ type: 'success', text: 'Emailingizni tasdiqlash uchun xat yuborildi!' })
+                setMessage({ type: 'success', text: 'Muvaffaqiyatli ro\'yxatdan o\'tdingiz! Endi tizimga kirishingiz mumkin.' })
             }
         } catch (error: any) {
             setMessage({ type: 'error', text: error.message })
