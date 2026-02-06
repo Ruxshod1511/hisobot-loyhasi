@@ -231,15 +231,19 @@ export const Dashboard = () => {
 
     const handleInputChange = (index: number, field: keyof ReportRow, value: any) => {
         const newRows = [...rows]
+        const row = { ...newRows[index] }
+
         if (field !== 'sabablar') {
             const cleanValue = parseNumber(value)
-            // Allow empty or numeric-only strings
             if (cleanValue !== '' && isNaN(Number(cleanValue))) return
-            // @ts-ignore
-            newRows[index][field] = cleanValue
+
+            // Safe assignment for numeric fields
+            (row as any)[field] = cleanValue === '' ? '' : cleanValue
         } else {
-            newRows[index][field] = value
+            row[field] = value
         }
+
+        newRows[index] = row
         setRows(newRows)
     }
 
