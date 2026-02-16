@@ -22,7 +22,7 @@ function AppContent() {
         return (
             <div className="app-loading">
                 <div className="loader-spinner"></div>
-                <div className="loading-text">YUKLANMOQDA...</div>
+                <div className="text-center loading-text">YUKLANMOQDA...</div>
             </div>
         )
     }

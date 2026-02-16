@@ -554,6 +554,12 @@ export const Dashboard = () => {
                     <button onClick={exportExcel} className="nav-btn">
                         <FileSpreadsheet size={20} /> <span className="btn-label">Excel Export</span>
                     </button>
+                    <div className="mobile-only-theme-toggle" style={{ display: 'none' }}>
+                        <button onClick={toggleTheme} className="nav-btn">
+                            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                            <span className="btn-label">{theme === 'light' ? 'Tungi' : 'Kungi'}</span>
+                        </button>
+                    </div>
                 </nav>
                 <div className="sidebar-footer" style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <button onClick={toggleTheme} className="nav-btn theme-toggle-btn">
@@ -579,17 +585,21 @@ export const Dashboard = () => {
                         <h2>{activeGroupId ? reportName : 'Yangi Hisobot'}</h2>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <p style={{ color: 'var(--text-dim)', fontSize: '0.85rem' }}>{reportDate} • {user?.email}</p>
-                            <div style={{
-                                background: 'var(--primary)',
-                                color: 'white',
-                                padding: '0.25rem 0.75rem',
-                                borderRadius: '20px',
-                                fontSize: '0.9rem',
-                                fontWeight: 800,
-                                boxShadow: '0 2px 4px rgba(59, 130, 246, 0.3)'
-                            }}>
-                                JAMI: {formatNumber(totalItog)}
-                            </div>
+                        </div>
+                    </div>
+
+                    <div className="analytics-summary">
+                        <div className="stat-card">
+                            <span className="stat-label">JAMI TOVAR</span>
+                            <span className="stat-value">{formatNumber(rows.reduce((acc, r) => acc + (Number(r.tovar) || 0), 0))}</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">JAMI HAQQI</span>
+                            <span className="stat-value highlight">{formatNumber(rows.reduce((acc, r) => acc + calculateItog(r), 0))}</span>
+                        </div>
+                        <div className="stat-card">
+                            <span className="stat-label">QATORLAR</span>
+                            <span className="stat-value">{filterActiveRows(rows).length}</span>
                         </div>
                     </div>
                     <div className="bulk-add-controls">
