@@ -2,7 +2,6 @@ export interface ReportRow {
     id?: string;
     sabablar: string;
     tovar: number | '';
-    ok: number | '';
     rasxod: number | '';
     vazvirat: number | '';
     pul: number | '';
@@ -21,14 +20,14 @@ export const parseNumber = (val: string): string => val.replace(/\./g, '');
 
 export const calculateItog = (row: ReportRow): number => {
     const tovar = Number(row.tovar) || 0;
-    const out = (Number(row.ok) || 0) + (Number(row.rasxod) || 0) + (Number(row.vazvirat) || 0) + (Number(row.pul) || 0) + (Number(row.kilik_ozi) || 0);
+    const out = (Number(row.rasxod) || 0) + (Number(row.vazvirat) || 0) + (Number(row.pul) || 0) + (Number(row.kilik_ozi) || 0);
     return tovar - out;
 };
 
 export const filterActiveRows = (rows: ReportRow[]): ReportRow[] => {
     return rows.filter(r =>
         r.sabablar.trim() !== '' ||
-        r.tovar !== '' || r.ok !== '' || r.rasxod !== '' ||
+        r.tovar !== '' || r.rasxod !== '' ||
         r.vazvirat !== '' || r.pul !== '' || r.kilik_ozi !== ''
     );
 };

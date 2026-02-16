@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
-import { Mail, Lock, User as UserIcon, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, User as UserIcon, Loader2, ArrowRight, Eye, EyeOff, CheckCircle2, LayoutDashboard } from 'lucide-react'
 
 const Auth = () => {
     const [isLogin, setIsLogin] = useState(true)
@@ -10,6 +10,11 @@ const Auth = () => {
     const [fullName, setFullName] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [message, setMessage] = useState<{ type: 'error' | 'success', text: string } | null>(null)
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -29,104 +34,108 @@ const Auth = () => {
                     }
                 })
                 if (error) throw error
-                setMessage({ type: 'success', text: 'Muvaffaqiyatli ro\'yxatdan o\'tdingiz! Endi tizimga kirishingiz mumkin.' })
+                setMessage({ type: 'success', text: 'Muvaffaqiyatli! Tizimga kirishingiz mumkin.' })
+                setTimeout(() => setIsLogin(true), 1500)
             }
         } catch (error: any) {
-            setMessage({ type: 'error', text: error.message })
+            setMessage({ type: 'error', text: error.message === 'Invalid login credentials' ? 'Email yoki parol noto\'g\'ri' : error.message })
         } finally {
             setLoading(false)
         }
     }
 
+    if (!mounted) return null
+
     return (
-        <div className="auth-container">
-            <div className="auth-card">
-                <div className="auth-header">
-                    <h1>{isLogin ? 'Xush Kelibsiz' : 'Ro\'yxatdan O\'tish'}</h1>
-                    <p>{isLogin ? 'Tizimga kirish' : 'Yangi hisob yaratish'}</p>
+        <div className="compact-auth-container">
+            <div className="compact-auth-card">
+                <div className="compact-header">
+                    <div className="compact-logo">
+                        <LayoutDashboard size={24} />
+                    </div>
+                    <div>
+                        <h2>{isLogin ? 'Xush Kelibsiz' : 'Yangi Hisob'}</h2>
+                        <p>{isLogin ? 'Achot CRM tizimiga kirish' : 'Hoziroq ro\'yxatdan o\'ting'}</p>
+                    </div>
                 </div>
 
-                <form onSubmit={handleAuth} className="auth-form">
+                <form onSubmit={handleAuth} className="compact-form">
                     {!isLogin && (
-                        <div className="input-group">
-                            <UserIcon />
+                        <div className="compact-input-group">
+                            <UserIcon size={16} className="input-icon" />
                             <input
                                 type="text"
-                                placeholder="To'liq Ismingiz"
+                                placeholder="Ism Familiya"
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 required
+                                autoComplete="name"
+                                className="compact-input"
                             />
                         </div>
                     )}
 
-                    <div className="input-group">
-                        <Mail />
+                    <div className="compact-input-group">
+                        <Mail size={16} className="input-icon" />
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder="Email manzil"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            autoComplete="username"
+                            className="compact-input"
                         />
                     </div>
 
-                    <div className="input-group">
-                        <Lock />
+                    <div className="compact-input-group">
+                        <Lock size={16} className="input-icon" />
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Parol"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            autoComplete={isLogin ? "current-password" : "new-password"}
+                            minLength={6}
+                            className="compact-input"
                         />
                         <button
                             type="button"
-                            className="password-toggle"
+                            className="compact-password-toggle"
                             onClick={() => setShowPassword(!showPassword)}
-                            aria-label={showPassword ? "Parolni yashirish" : "Parolni ko'rsatish"}
+                            tabIndex={-1}
                         >
                             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                     </div>
 
                     {message && (
-                        <div className={`message ${message.type}`}>
-                            {message.text}
+                        <div className={`compact-message ${message.type}`}>
+                            {message.type === 'success' ? <CheckCircle2 size={14} /> : null}
+                            <span>{message.text}</span>
                         </div>
                     )}
 
-                    <button type="submit" disabled={loading} className="auth-button">
+                    <button type="submit" disabled={loading} className="compact-submit-btn">
                         {loading ? <Loader2 className="animate-spin" size={18} /> : (
                             <>
-                                {isLogin ? 'Kirish' : 'Ro\'yxatdan o\'tish'}
+                                {isLogin ? 'Kirish' : 'Ro\'yxatdan O\'tish'}
                                 <ArrowRight size={18} />
                             </>
                         )}
                     </button>
                 </form>
 
-                <div className="auth-footer">
-                    <button onClick={() => setIsLogin(!isLogin)} className="toggle-auth">
-                        {isLogin ? (
-                            <>Hisobingiz yo'qmi? <span>Ro'yxatdan o'ting</span></>
-                        ) : (
-                            <>Hisobingiz bormi? <span>Tizimga kiring</span></>
-                        )}
+                <div className="compact-footer">
+                    <button onClick={() => { setIsLogin(!isLogin); setMessage(null); }} className="compact-switch-btn">
+                        {isLogin ? 'Ro\'yxatdan o\'tish' : 'Kirish'}
                     </button>
                 </div>
             </div>
 
-            <a href="https://t.me/MrRuxshod" target="_blank" rel="noopener noreferrer" className="contact-dev-card">
-                <div className="contact-info">
-                    <span className="contact-title">Dasturchiga murojaat qilish</span>
-                    <span className="contact-subtitle">Texnik yordam va savollar uchun</span>
-                </div>
-                <div className="contact-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
-                    </svg>
-                </div>
+            <a href="https://t.me/MrRuxshod" target="_blank" rel="noopener noreferrer" className="compact-dev-link">
+                Dasturchi yordami
             </a>
         </div>
     )

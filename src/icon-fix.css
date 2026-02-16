@@ -1,0 +1,28 @@
+/* ============================================
+   Icon Standartlashtirish
+   ============================================ */
+
+/* Barcha iconlar 18px */
+.sidebar svg,
+.nav-btn svg,
+.icon-btn svg,
+.theme-toggle svg,
+.bulk-add-btn svg,
+.action-buttons svg,
+.custom-checkbox svg,
+.toast svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Logo icon */
+.logo-svg {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+/* Stat card iconlari */
+.stat-icon-wrapper svg {
+    width: 20px !important;
+    height: 20px !important;
+}

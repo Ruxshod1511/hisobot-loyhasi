@@ -1,0 +1,55 @@
+/* Theme Toggle Button - Chiroyli dizayn */
+.theme-toggle {
+    background: transparent !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+    padding: 0.65rem 0.85rem !important;
+    border-radius: var(--radius) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    cursor: pointer !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    transition: all var(--transition) !important;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-hover) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-dark) !important;
+}
+
+/* Yangi tugmalar uchun CSS */
+.clear-selection {
+    background: var(--color-warning) !important;
+    color: white !important;
+    border-color: var(--color-warning) !important;
+}
+
+.clear-selection:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-1px) !important;
+}
+
+.clear-empty {
+    background: #6b7280 !important;
+    color: white !important;
+    border-color: #6b7280 !important;
+}
+
+.clear-empty:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-1px) !important;
+}
+
+.delete-selected {
+    background: var(--color-danger) !important;
+    color: white !important;
+    border-color: var(--color-danger) !important;
+}
+
+.delete-selected:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-1px) !important;
+}

@@ -28,13 +28,13 @@ interface ToastMessage {
     type: 'success' | 'error' | 'info'
 }
 
-const DASHBOARD_FIELDS = ['sabablar', 'tovar', 'ok', 'rasxod', 'vazvirat', 'pul', 'kilik_ozi']
+const DASHBOARD_FIELDS = ['sabablar', 'tovar', 'rasxod', 'vazvirat', 'pul', 'kilik_ozi']
 
 export const Dashboard = () => {
     const { user, signOut } = useAuth()
     const [reportGroups, setReportGroups] = useState<ReportGroup[]>([])
     const [activeGroupId, setActiveGroupId] = useState<string | null>(null)
-    const [rows, setRows] = useState<ReportRow[]>([{ sabablar: '', tovar: '', ok: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
+    const [rows, setRows] = useState<ReportRow[]>([{ sabablar: '', tovar: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
     const [loading, setLoading] = useState(true)
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
     const [isLoadModalOpen, setIsLoadModalOpen] = useState(false)
@@ -165,7 +165,6 @@ export const Dashboard = () => {
                 id: r.id,
                 sabablar: r.sabablar || '',
                 tovar: r.tovar || '',
-                ok: r.ok || '',
                 rasxod: r.rasxod || '',
                 vazvirat: r.vazvirat || '',
                 pul: r.pul || '',
@@ -184,7 +183,7 @@ export const Dashboard = () => {
         if (hasUnsavedChanges) {
             setPendingAction(() => () => {
                 setActiveGroupId(null)
-                setRows([{ sabablar: '', tovar: '', ok: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
+                setRows([{ sabablar: '', tovar: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
                 setReportName('')
                 setReportDate(new Date().toISOString().split('T')[0])
                 setSelectedRows(new Set())
@@ -195,7 +194,7 @@ export const Dashboard = () => {
             return
         }
         setActiveGroupId(null)
-        setRows([{ sabablar: '', tovar: '', ok: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
+        setRows([{ sabablar: '', tovar: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
         setReportName('')
         setReportDate(new Date().toISOString().split('T')[0])
         setSelectedRows(new Set())
@@ -205,7 +204,7 @@ export const Dashboard = () => {
 
     const handleBulkAddRows = () => {
         const newRowsList: ReportRow[] = Array(numRowsToAdd).fill(null).map(() => ({
-            sabablar: '', tovar: '', ok: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: ''
+            sabablar: '', tovar: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: ''
         }))
         setRows(prev => [...prev, ...newRowsList])
         setHasUnsavedChanges(true)
@@ -232,7 +231,6 @@ export const Dashboard = () => {
             user_id: user?.id,
             sabablar: r.sabablar,
             tovar: Number(r.tovar) || 0,
-            ok: Number(r.ok) || 0,
             rasxod: Number(r.rasxod) || 0,
             vazvirat: Number(r.vazvirat) || 0,
             pul: Number(r.pul) || 0,
@@ -290,7 +288,7 @@ export const Dashboard = () => {
         } else if (e.key === 'Enter') {
             e.preventDefault()
             if (index === rows.length - 1) {
-                setRows(prev => [...prev, { sabablar: '', tovar: '', ok: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
+                setRows(prev => [...prev, { sabablar: '', tovar: '', rasxod: '', vazvirat: '', pul: '', kilik_ozi: '' }])
                 setHasUnsavedChanges(true)
                 setTimeout(() => inputRefs.current[`${index + 1}-sabablar`]?.focus(), 10)
             } else {
@@ -311,13 +309,13 @@ export const Dashboard = () => {
 
         const filtered = filterActiveRows(rows)
         const tableData = filtered.map((r, index) => [
-            index + 1, r.sabablar, '', formatNumber(r.tovar) || '0', formatNumber(r.ok) || '0',
+            index + 1, r.sabablar, '', formatNumber(r.tovar) || '0',
             formatNumber(r.rasxod) || '0', formatNumber(r.vazvirat) || '0', formatNumber(r.pul) || '0',
             formatNumber(r.kilik_ozi) || '0'
         ])
 
         autoTable(doc, {
-            head: [['N', 'SABABLAR', 'BELGI', 'TOVAR', 'OK', 'RASXOD', 'VAZVIRAT', 'PUL', 'KILIK O\'ZI']],
+            head: [['N', 'SABABLAR', 'BELGI', 'TOVAR', 'RASXOD', 'VAZVIRAT', 'PUL', 'KILIK O\'ZI']],
             body: tableData,
             startY: 35,
             theme: 'grid',
@@ -343,7 +341,6 @@ export const Dashboard = () => {
     const exportExcel = () => {
         const filteredRows = filterActiveRows(rows)
         const totalT = filteredRows.reduce((acc, r) => acc + (Number(r.tovar) || 0), 0)
-        const totalO = filteredRows.reduce((acc, r) => acc + (Number(r.ok) || 0), 0)
         const totalR = filteredRows.reduce((acc, r) => acc + (Number(r.rasxod) || 0), 0)
         const totalV = filteredRows.reduce((acc, r) => acc + (Number(r.vazvirat) || 0), 0)
         const totalP = filteredRows.reduce((acc, r) => acc + (Number(r.pul) || 0), 0)
@@ -368,7 +365,6 @@ export const Dashboard = () => {
                         <th width="300" style="text-align:left;padding-left:10px;">SABABLAR</th>
                         <th width="80">BELGI</th>
                         <th width="120">TOVAR</th>
-                        <th width="120">OK</th>
                         <th width="120">RASXOD</th>
                         <th width="120">VAZVIRAT</th>
                         <th width="120">PUL</th>
@@ -382,7 +378,6 @@ export const Dashboard = () => {
                             <td style="padding:0 12px;background:#ffffff;">${r.sabablar}</td>
                             <td style="background:#ffffff;"></td>
                             <td align="center" style="background:#fff7f7;font-weight:bold;color:#b91c1c;">${formatNumber(r.tovar)}</td>
-                            <td align="center" style="background:#ffffff;">${formatNumber(r.ok)}</td>
                             <td align="center" style="background:#f0fdf4;font-weight:bold;color:#15803d;">${formatNumber(r.rasxod)}</td>
                             <td align="center" style="background:#ffffff;">${formatNumber(r.vazvirat)}</td>
                             <td align="center" style="background:#f0f9ff;font-weight:bold;color:#1d4ed8;">${formatNumber(r.pul)}</td>
@@ -395,7 +390,6 @@ export const Dashboard = () => {
                         <td align="center">${filteredRows.length}</td>
                         <td colspan="2" style="padding-left:10px;">JAMI:</td>
                         <td align="center" style="color:#b91c1c;">${formatNumber(totalT)}</td>
-                        <td align="center">${formatNumber(totalO)}</td>
                         <td align="center" style="color:#15803d;">${formatNumber(totalR)}</td>
                         <td align="center">${formatNumber(totalV)}</td>
                         <td align="center" style="color:#1d4ed8;">${formatNumber(totalP)}</td>
@@ -414,7 +408,6 @@ export const Dashboard = () => {
     }
 
     const totalTovar = useMemo(() => rows.reduce((acc, r) => acc + (Number(r.tovar) || 0), 0), [rows])
-    const totalOk = useMemo(() => rows.reduce((acc, r) => acc + (Number(r.ok) || 0), 0), [rows])
     const totalRasxod = useMemo(() => rows.reduce((acc, r) => acc + (Number(r.rasxod) || 0), 0), [rows])
     const totalVazvirat = useMemo(() => rows.reduce((acc, r) => acc + (Number(r.vazvirat) || 0), 0), [rows])
     const totalPul = useMemo(() => rows.reduce((acc, r) => acc + (Number(r.pul) || 0), 0), [rows])
@@ -526,16 +519,11 @@ export const Dashboard = () => {
             <aside className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-header">
                     <div className="logo-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="logo-svg">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <line x1="3" y1="9" x2="21" y2="9" />
-                            <line x1="9" y1="21" x2="9" y2="9" />
-                        </svg>
                         <div className="logo-text">ACHOT CRM</div>
                     </div>
                     <div className={`online-status ${isOnline ? 'online' : 'offline'}`} title={isOnline ? 'Internet bor' : 'Internet yo\'q'}></div>
                     <button className="icon-btn" onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}>
-                        {isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                        {isSidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                     </button>
                 </div>
                 <nav className="nav-actions">
@@ -561,11 +549,7 @@ export const Dashboard = () => {
                         </button>
                     </div>
                 </nav>
-                <div className="sidebar-footer" style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <button onClick={toggleTheme} className="nav-btn theme-toggle-btn">
-                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-                        <span className="btn-label">{theme === 'light' ? 'Tungi Rejim' : 'Kungi Rejim'}</span>
-                    </button>
+                <div className="sidebar-footer">
                     <button onClick={() => {
                         if (hasUnsavedChanges) {
                             setPendingAction(() => () => signOut())
@@ -573,46 +557,85 @@ export const Dashboard = () => {
                             return
                         }
                         signOut()
-                    }} className="nav-btn" style={{ color: '#ef4444' }}>
-                        <LogOut size={20} /> <span className="btn-label">Chiqish</span>
+                    }} className="nav-btn logout-btn">
+                        <LogOut size={20} /> <span className="btn-label">Tizimdan Chiqish</span>
+                    </button>
+                    <button onClick={toggleTheme} className="nav-btn">
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                        <span className="btn-label">{theme === 'light' ? 'Tungi Rejim' : 'Kungi Rejim'}</span>
                     </button>
                 </div>
             </aside>
 
             <main className="main-content">
                 <header className="content-header">
-                    <div className="title-group">
-                        <h2>{activeGroupId ? reportName : 'Yangi Hisobot'}</h2>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <p style={{ color: 'var(--text-dim)', fontSize: '0.85rem' }}>{reportDate} • {user?.email}</p>
+                    <div className="header-primary">
+                        <div className="title-group">
+                            <h2 style={{ fontSize: '1.85rem', fontWeight: 900, letterSpacing: '-0.5px' }}>{activeGroupId ? reportName : 'Yangi Hisobot'}</h2>
+                            <p className="report-meta">{reportDate} • {user?.email}</p>
+                        </div>
+
+                        <div className="analytics-summary">
+                            <div className="stat-card">
+                                <div className="stat-icon-wrapper tovar">
+                                    <Plus size={20} />
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-label">JAMI TOVAR</span>
+                                    <span className="stat-value">{formatNumber(totalTovar)}</span>
+                                </div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-icon-wrapper haqqi">
+                                    <CheckCircle2 size={20} />
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-label">JAMI HAQQI</span>
+                                    <span className="stat-value highlight">{formatNumber(totalItog)}</span>
+                                </div>
+                            </div>
+                            <div className="stat-card">
+                                <div className="stat-icon-wrapper qatorlar">
+                                    <FilePlus size={20} />
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-label">QATORLAR</span>
+                                    <span className="stat-value">{filterActiveRows(rows).length}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="analytics-summary">
-                        <div className="stat-card">
-                            <span className="stat-label">JAMI TOVAR</span>
-                            <span className="stat-value">{formatNumber(rows.reduce((acc, r) => acc + (Number(r.tovar) || 0), 0))}</span>
+                    <div className="header-actions">
+                        <div className="bulk-add-controls">
+                            <span className="control-label">Qator qo'shish:</span>
+                            <div className="bulk-input-wrapper">
+                                <input type="number" className="bulk-add-input" value={numRowsToAdd} onChange={e => setNumRowsToAdd(Math.max(1, parseInt(e.target.value) || 1))} />
+                                <button className="bulk-add-btn" onClick={handleBulkAddRows}><Plus size={16} /></button>
+                            </div>
                         </div>
-                        <div className="stat-card">
-                            <span className="stat-label">JAMI HAQQI</span>
-                            <span className="stat-value highlight">{formatNumber(rows.reduce((acc, r) => acc + calculateItog(r), 0))}</span>
-                        </div>
-                        <div className="stat-card">
-                            <span className="stat-label">QATORLAR</span>
-                            <span className="stat-value">{filterActiveRows(rows).length}</span>
-                        </div>
-                    </div>
-                    <div className="bulk-add-controls">
-                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)' }}>Qator qo'shish:</span>
-                        <input type="number" className="bulk-add-input" value={numRowsToAdd} onChange={e => setNumRowsToAdd(Math.max(1, parseInt(e.target.value) || 1))} />
-                        <button className="bulk-add-btn" onClick={handleBulkAddRows}><Plus size={16} /> Qo'shish</button>
-                    </div>
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                        {selectedRows.size > 0 && (
-                            <button className="icon-btn" style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: 'var(--radius)', fontWeight: 700 }} onClick={handleDeleteSelected}>
-                                <Trash2 size={18} style={{ marginRight: '0.5rem' }} /> O'chirish ({selectedRows.size})
+
+                        <div className="action-buttons" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                            {selectedRows.size > 0 && (
+                                <>
+                                    <button className="icon-btn clear-selection" onClick={() => setSelectedRows(new Set())} style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                                        <X size={18} />
+                                        <span className="btn-label">Belgilashni bekor qilish</span>
+                                    </button>
+                                    <button className="icon-btn delete-selected" onClick={handleDeleteSelected} style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                                        <Trash2 size={18} />
+                                        <span className="btn-label">O'chirish ({selectedRows.size})</span>
+                                    </button>
+                                </>
+                            )}
+                            <button className="icon-btn clear-empty" onClick={() => {
+                                setRows(prev => prev.filter(r => r.sabablar.trim() || r.tovar || r.rasxod || r.vazvirat || r.pul || r.kilik_ozi))
+                                addToast('Bo\'sh qatorlar o\'chirildi', 'success')
+                            }} style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                                <Trash2 size={18} />
+                                <span className="btn-label">Bo'sh qatorlarni o'chirish</span>
                             </button>
-                        )}
+                        </div>
                     </div>
                 </header>
 
@@ -628,14 +651,13 @@ export const Dashboard = () => {
                                         {selectedRows.size === rows.length ? <CheckSquare size={16} /> : <Square size={16} />}
                                     </div>
                                 </th>
-                                <th className="n-col">N</th>
-                                <th style={{ textAlign: 'left', minWidth: '200px' }}>SABABLAR</th>
-                                <th>TOVAR</th>
-                                <th>OK</th>
-                                <th>RASXOD</th>
-                                <th>VAZVIRAT</th>
-                                <th>PUL</th>
-                                <th>KILIK O'ZI</th>
+                                <th className="n-col" style={{ width: '50px' }}>N</th>
+                                <th style={{ textAlign: 'left', width: '300px' }}>SABABLAR</th>
+                                <th style={{ width: '150px' }}>TOVAR</th>
+                                <th style={{ width: '150px' }}>RASXOD</th>
+                                <th style={{ width: '150px' }}>VAZVIRAT</th>
+                                <th style={{ width: '150px' }}>PUL</th>
+                                <th style={{ width: '150px' }}>KILIK O'ZI</th>
                             </tr>
                         </thead>
                         <tbody
@@ -657,11 +679,18 @@ export const Dashboard = () => {
                                     index={index}
                                     row={row}
                                     isSelected={selectedRows.has(index)}
-                                    onToggleSelect={(idx: number) => {
+                                    onToggleSelect={(idx: number, event: React.MouseEvent) => {
                                         setSelectedRows(prev => {
                                             const next = new Set(prev)
-                                            if (next.has(idx)) next.delete(idx)
-                                            else next.add(idx)
+                                            if (event.ctrlKey || event.metaKey) {
+                                                // Ctrl bosib multiple selection
+                                                if (next.has(idx)) next.delete(idx)
+                                                else next.add(idx)
+                                            } else {
+                                                // Oddiy bosish - faqat bitta
+                                                next.clear()
+                                                next.add(idx)
+                                            }
                                             return next
                                         })
                                     }}
@@ -674,15 +703,13 @@ export const Dashboard = () => {
                         </tbody>
                         <tfoot>
                             <tr className="jami-row">
-                                <td colSpan={2}>{rows.length}</td>
-                                <td>JAMI</td>
+                                <td colSpan={2}>{rows.length} qator</td>
+                                <td style={{ textAlign: 'left' }}>JAMI HAQQI / TOTAL SUMMARY</td>
                                 <td>{formatNumber(totalTovar)}</td>
-                                <td>{formatNumber(totalOk)}</td>
                                 <td>{formatNumber(totalRasxod)}</td>
                                 <td>{formatNumber(totalVazvirat)}</td>
                                 <td>{formatNumber(totalPul)}</td>
                                 <td>{formatNumber(totalKilik)}</td>
-                                <td style={{ borderTop: '2px solid var(--primary)' }}></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -778,7 +805,7 @@ export const Dashboard = () => {
                 <div className="modal-overlay" style={{ background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(2px)' }}>
                     <div style={{ background: 'var(--bg-card)', padding: '1rem 2rem', borderRadius: 'var(--radius)', display: 'flex', alignItems: 'center', gap: '1rem', boxShadow: 'var(--shadow)' }}>
                         <div style={{ animation: 'spin 1s linear infinite' }}>
-                            <Search size={24} style={{ color: 'var(--primary)' }} />
+                            <Search size={18} style={{ color: 'var(--primary)' }} />
                         </div>
                         <span style={{ fontWeight: 700 }}>Yuklanmoqda...</span>
                     </div>
@@ -792,8 +819,8 @@ const TableRow = memo(({ index, row, isSelected, onToggleSelect, onInputChange, 
     return (
         <tr className={isSelected ? 'row-selected' : ''}>
             <td style={{ width: '40px' }}>
-                <div className="custom-checkbox" onClick={() => onToggleSelect(index)}>
-                    {isSelected ? <CheckSquare size={16} /> : <Square size={16} />}
+                <div className="custom-checkbox" onClick={(e) => onToggleSelect(index, e)}>
+                    {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
                 </div>
             </td>
             <td className="n-col">{index + 1}</td>
@@ -803,9 +830,7 @@ const TableRow = memo(({ index, row, isSelected, onToggleSelect, onInputChange, 
             <td className="tovar-cell">
                 <input ref={el => inputRefs.current[`${index}-tovar`] = el} value={formatNumber(row.tovar)} onChange={e => onInputChange(index, 'tovar', e.target.value)} onKeyDown={e => onKeyDown(e, index, 'tovar')} />
             </td>
-            <td className="ok-cell">
-                <input ref={el => inputRefs.current[`${index}-ok`] = el} value={formatNumber(row.ok)} onChange={e => onInputChange(index, 'ok', e.target.value)} onKeyDown={e => onKeyDown(e, index, 'ok')} />
-            </td>
+
             <td className="rasxod-cell">
                 <input ref={el => inputRefs.current[`${index}-rasxod`] = el} value={formatNumber(row.rasxod)} onChange={e => onInputChange(index, 'rasxod', e.target.value)} onKeyDown={e => onKeyDown(e, index, 'rasxod')} />
             </td>
