@@ -4,7 +4,7 @@ import Dashboard from './components/Dashboard'
 import { isConfigured } from './supabaseClient'
 
 function AppContent() {
-    const { user } = useAuth()
+    const { user, loading } = useAuth()
 
     if (!isConfigured) {
         return (
@@ -14,6 +14,15 @@ function AppContent() {
                     <p>Iltimos, <code>.env</code> fayliga Supabase URL va Anon Key ma'lumotlarini kiriting.</p>
                     <p>Keyin serverni qayta ishga tushiring.</p>
                 </div>
+            </div>
+        )
+    }
+
+    if (loading) {
+        return (
+            <div className="app-loading">
+                <div className="loader-spinner"></div>
+                <div className="loading-text">YUKLANMOQDA...</div>
             </div>
         )
     }
