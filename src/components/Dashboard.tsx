@@ -7,6 +7,13 @@ import {
     CheckSquare, Square, ChevronLeft, ChevronRight,
     Moon, Sun, Info, CheckCircle2, AlertCircle
 } from 'lucide-react'
+import {
+    ReportRow,
+    formatNumber,
+    parseNumber,
+    calculateItog,
+    filterActiveRows
+} from '../utils/reports'
 
 interface ReportGroup {
     id: string
@@ -14,16 +21,6 @@ interface ReportGroup {
     report_date: string
 }
 
-interface ReportRow {
-    id?: string
-    sabablar: string
-    tovar: number | '';
-    ok: number | '';
-    rasxod: number | '';
-    vazvirat: number | '';
-    pul: number | '';
-    kilik_ozi: number | '';
-}
 
 interface ToastMessage {
     id: number
@@ -229,11 +226,7 @@ export const Dashboard = () => {
             await supabase.from('report_groups').update({ name: reportName, report_date: reportDate }).eq('id', groupId)
         }
 
-        const rowsToSave = rows.filter(r =>
-            r.sabablar.trim() !== '' ||
-            r.tovar !== '' || r.ok !== '' || r.rasxod !== '' ||
-            r.vazvirat !== '' || r.pul !== '' || r.kilik_ozi !== ''
-        ).map(r => ({
+        const rowsToSave = filterActiveRows(rows).map(r => ({
             ...(r.id ? { id: r.id } : {}),
             group_id: groupId,
             user_id: user?.id,
@@ -260,21 +253,6 @@ export const Dashboard = () => {
         setLoading(false)
     }
 
-    const formatNumber = (val: number | string | undefined) => {
-        if (val === '' || val === undefined || val === null) return ''
-        const strVal = String(val).replace(/\./g, '')
-        const num = Number(strVal)
-        if (isNaN(num)) return ''
-        return num.toLocaleString('de-DE')
-    }
-
-    const parseNumber = (val: string) => val.replace(/\./g, '')
-
-    const calculateItog = (row: ReportRow) => {
-        const tovar = Number(row.tovar) || 0
-        const out = (Number(row.ok) || 0) + (Number(row.rasxod) || 0) + (Number(row.vazvirat) || 0) + (Number(row.pul) || 0) + (Number(row.kilik_ozi) || 0)
-        return tovar - out
-    }
 
     const handleInputChange = useCallback((index: number, field: keyof ReportRow, value: any) => {
         setRows(prev => {
@@ -331,11 +309,7 @@ export const Dashboard = () => {
         doc.setFontSize(10)
         doc.text(`Sana: ${reportDate}`, 14, 28)
 
-        const filtered = rows.filter(r =>
-            r.sabablar.trim() !== '' ||
-            r.tovar !== '' || r.ok !== '' || r.rasxod !== '' ||
-            r.vazvirat !== '' || r.pul !== '' || r.kilik_ozi !== ''
-        )
+        const filtered = filterActiveRows(rows)
         const tableData = filtered.map((r, index) => [
             index + 1, r.sabablar, '', formatNumber(r.tovar) || '0', formatNumber(r.ok) || '0',
             formatNumber(r.rasxod) || '0', formatNumber(r.vazvirat) || '0', formatNumber(r.pul) || '0',
@@ -367,11 +341,7 @@ export const Dashboard = () => {
     }
 
     const exportExcel = () => {
-        const filteredRows = rows.filter(r =>
-            r.sabablar.trim() !== '' ||
-            r.tovar !== '' || r.ok !== '' || r.rasxod !== '' ||
-            r.vazvirat !== '' || r.pul !== '' || r.kilik_ozi !== ''
-        )
+        const filteredRows = filterActiveRows(rows)
         const totalT = filteredRows.reduce((acc, r) => acc + (Number(r.tovar) || 0), 0)
         const totalO = filteredRows.reduce((acc, r) => acc + (Number(r.ok) || 0), 0)
         const totalR = filteredRows.reduce((acc, r) => acc + (Number(r.rasxod) || 0), 0)

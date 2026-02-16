@@ -117,7 +117,7 @@ const Auth = () => {
                 </div>
             </div>
 
-            <a href="https://t.me/admin_achot" target="_blank" rel="noopener noreferrer" className="contact-dev-card">
+            <a href="https://t.me/MrRuxshod" target="_blank" rel="noopener noreferrer" className="contact-dev-card">
                 <div className="contact-info">
                     <span className="contact-title">Dasturchiga murojaat qilish</span>
                     <span className="contact-subtitle">Texnik yordam va savollar uchun</span>
